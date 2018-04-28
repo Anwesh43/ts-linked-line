@@ -81,12 +81,9 @@ class LLNode {
     prev : LLNode
     next : LLNode
     state : State = new State()
-    i : number = 0
 
-    constructor(i : number) {
-        if (i) {
-            this.i = i
-        }
+    constructor(private i : number) {
+
     }
 
     addNeighbor() {
@@ -129,6 +126,32 @@ class LLNode {
         return this
     }
 
+}
+
+class LinkedLine {
+    private curr : LLNode = new LLNode(0)
+    private dir : number = 1
+
+    constructor() {
+        this.curr.addNeighbor()
+    }
+
+    draw(context : CanvasRenderingContext2D) {
+        this.curr.draw(context)
+    }
+
+    update(stopcb : Function) {
+        this.curr.update(()=>{
+            this.curr = this.curr.getNext(this.dir, () => {
+                this.dir *= -1
+            })
+            stopcb()
+        })
+    }
+
+    startUpdating(startcb : Function) {
+        this.curr.startUpdating(startcb)
+    }
 }
 
 const initLinkedLineStage = () => {
