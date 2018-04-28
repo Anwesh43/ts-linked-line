@@ -1,5 +1,6 @@
 const w : number = window.innerWidth
 const h : number = window.innerHeight
+const NODES : number = 10
 class LinkedLineStage {
     private canvas : HTMLCanvasElement = document.createElement('canvas')
     private context : CanvasRenderingContext2D
@@ -74,6 +75,60 @@ class State {
             startcb()
         }
     }
+}
+
+class LLNode {
+    prev : LLNode
+    next : LLNode
+    state : State = new State()
+    i : number = 0
+
+    constructor(i : number) {
+        if (i) {
+            this.i = i
+        }
+    }
+
+    addNeighbor() {
+        if (this.i < NODES - 1) {
+            const NODE : LLNode = new LLNode(this.i+1)
+            NODE.prev = this
+            this.next = NODE
+            NODE.addNeighbor()
+        }
+    }
+
+    draw(context : CanvasRenderingContext2D) {
+        const size = w/NODES
+        context.strokeStyle = '#212121'
+        context.lineWidth = Math.min(w, h) / 50
+        context.lineCap = 'round'
+        context.beginPath()
+        context.moveTo(this.i * size + size * this.state.scales[1], h/2)
+        context.lineTo(this.i * size + size * this.state.scales[0], h/2)
+        context.stroke()
+    }
+
+    update(stopcb : Function) {
+        this.state.update(stopcb)
+    }
+
+    startUpdating(startcb : Function) {
+        this.state.startUpdating(startcb)
+    }
+
+    getNext(dir : number, cb : Function) : LLNode{
+        var curr : LLNode = this.prev
+        if (dir == 1) {
+            curr = this.next
+        }
+        if (curr) {
+            return curr
+        }
+        cb()
+        return this
+    }
+
 }
 
 const initLinkedLineStage = () => {
