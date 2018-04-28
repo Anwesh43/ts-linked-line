@@ -21,7 +21,13 @@ class LinkedLineStage {
 
     handleTap() {
         this.canvas.onmousedown = () => {
-            
+
         }
     }
+}
+
+const initLinkedLineStage = () => {
+    const linkedLineStage : LinkedLineStage = new LinkedLineStage()
+    linkedLineStage.render()
+    linkedLineStage.handleTap()
 }
