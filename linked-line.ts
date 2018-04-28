@@ -107,7 +107,7 @@ class LLNode {
 
     draw(context : CanvasRenderingContext2D) {
         const size = w/NODES
-        context.strokeStyle = '#212121'
+        context.strokeStyle = '#e74c3c'
         context.lineWidth = Math.min(w, h) / 50
         context.lineCap = 'round'
         context.beginPath()
