@@ -4,6 +4,8 @@ const NODES : number = 10
 class LinkedLineStage {
     private canvas : HTMLCanvasElement = document.createElement('canvas')
     private context : CanvasRenderingContext2D
+    private linkedLine : LinkedLine = new LinkedLine()
+    private animator : Animator = new Animator()
     constructor() {
         this.initCanvas()
     }
@@ -18,11 +20,19 @@ class LinkedLineStage {
     render() {
         this.context.fillStyle = '#212121'
         this.context.fillRect(0, 0, w, h)
+        this.linkedLine.draw(this.context)
     }
 
     handleTap() {
         this.canvas.onmousedown = () => {
-
+            this.linkedLine.startUpdating(() => {
+                this.animator.start(() => {
+                    this.render()
+                    this.linkedLine.update(() => {
+                        this.animator.stop()
+                    })
+                })
+            })
         }
     }
 }
